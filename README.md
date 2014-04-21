@@ -16,7 +16,7 @@ A lightweight Active Record implementation for PHP5.
 
 Built on top of [Idiorm](http://github.com/j4mie/idiorm/).
 
-Tested on PHP 5.2.0+ - may work on earlier versions with PDO and the correct database drivers.
+Tested on PHP 5.3.3+.
 
 Released under a [BSD license](http://en.wikipedia.org/wiki/BSD_licenses).
 
@@ -49,15 +49,15 @@ The documentation will now be in docs/_build/html/index.html
 Let's See Some Code
 -------------------
 ```php
-class User extends Model {
+class User extends \Paris\Model {
     public function tweets() {
         return $this->has_many('Tweet');
     }
 }
 
-class Tweet extends Model {}
+class Tweet extends \Paris\Model {}
 
-$user = Model::factory('User')
+$user = \Paris\Model::factory('User')
     ->where_equal('username', 'j4mie')
     ->find_one();
 $user->first_name = 'Jamie';
@@ -71,6 +71,15 @@ foreach ($tweets as $tweet) {
 
 Changelog
 ---------
+
+#### 2.x.x - released XXXX-XX-XX
+
+* PSR-4
+* Namespaces
+* All classes moved to namespace \Paris:
+	- Model => \Paris\Model
+	- ORMWrapper => \Paris\ORMWrapper
+* Use of PHP 5.3 static call
 
 #### 1.5.0 - released 2014-01-XX
 
