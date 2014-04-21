@@ -54,8 +54,9 @@ provided by Paris, passing in the class name of the related object. The
 ``profile`` method should return an ORM instance ready for (optional)
 further filtering.
 
-::
+.. code-block:: php
 
+    <?php
     class Profile extends Model {
     }
 
@@ -67,8 +68,9 @@ further filtering.
 
 The API for this method works as follows:
 
-::
+.. code-block:: php
 
+    <?php
     // Select a particular user from the database
     $user = Model::factory('User')->find_one($user_id);
 
@@ -81,6 +83,14 @@ appended. In the example above, Paris will look for a foreign key column
 called ``user_id`` on the table used by the ``Profile`` class. To
 override this behaviour, add a second argument to your ``has_one`` call,
 passing the name of the column to use.
+
+In addition, Paris assumes that the foreign key column in the current (base)
+ table is the primary key column of the base table. In the example above, 
+Paris will use the column called ``user_id`` (assuming ``user_id`` is the 
+primary key for the user table) in the base table (in this case the user table) 
+as the foreign key column in the base table. To override this behaviour, 
+add a third argument to your ``has_one call``, passing the name of the column 
+you intend to use as the foreign key column in the base table.
 
 Has many
 ^^^^^^^^
@@ -97,8 +107,9 @@ provided by Paris, passing in the class name of the related objects.
 ``posts`` method should return an ORM instance ready for (optional)
 further filtering.
 
-::
+.. code-block:: php
 
+    <?php
     class Post extends Model {
     }
 
@@ -110,8 +121,9 @@ further filtering.
 
 The API for this method works as follows:
 
-::
+.. code-block:: php
 
+    <?php
     // Select a particular user from the database
     $user = Model::factory('User')->find_one($user_id);
 
@@ -125,6 +137,14 @@ called ``user_id`` on the table used by the ``Post`` class. To override
 this behaviour, add a second argument to your ``has_many`` call, passing
 the name of the column to use.
 
+In addition, Paris assumes that the foreign key column in the current (base) 
+table is the primary key column of the base table. In the example above, Paris 
+will use the column called ``user_id`` (assuming ``user_id`` is the primary key 
+for the user table) in the base table (in this case the user table) as the 
+foreign key column in the base table. To override this behaviour, add a third 
+argument to your ``has_many call``, passing the name of the column you intend 
+to use as the foreign key column in the base table.
+
 Belongs to
 ^^^^^^^^^^
 
@@ -132,8 +152,9 @@ The ‘other side’ of ``has_one`` and ``has_many`` is ``belongs_to``. This
 method call takes identical parameters as these methods, but assumes the
 foreign key is on the *current* (base) table, not the related table.
 
-::
+.. code-block:: php
 
+    <?php
     class Profile extends Model {
         public function user() {
             return $this->belongs_to('User');
@@ -145,8 +166,9 @@ foreign key is on the *current* (base) table, not the related table.
 
 The API for this method works as follows:
 
-::
+.. code-block:: php
 
+    <?php
     // Select a particular profile from the database
     $profile = Model::factory('Profile')->find_one($profile_id);
 
@@ -159,6 +181,13 @@ appended. In the example above, Paris will look for a column named
 ``user_id``. To override this behaviour, pass a second argument to the
 ``belongs_to`` method, specifying the name of the column on the current
 (base) table to use.
+
+Paris also makes an assumption that the foreign key in the associated (related) 
+table is the primary key column of the related table. In the example above, 
+Paris will look for a column named ``user_id`` in the user table (the related 
+table in this example). To override this behaviour, pass a third argument to 
+the belongs_to method, specifying the name of the column in the related table 
+to use as the foreign key column in the related table.
 
 Has many through
 ^^^^^^^^^^^^^^^^
@@ -185,8 +214,9 @@ objects. **Pass the model class name literally, not a pluralised
 version**. The ``authors`` method should return an ORM instance ready
 for (optional) further filtering.
 
-::
+.. code-block:: php
 
+    <?php
     class Author extends Model {
         public function books() {
             return $this->has_many_through('Book');
@@ -204,8 +234,9 @@ for (optional) further filtering.
 
 The API for this method works as follows:
 
-::
+.. code-block:: php
 
+    <?php
     // Select a particular book from the database
     $book = Model::factory('Book')->find_one($book_id);
 
@@ -221,7 +252,7 @@ The API for this method works as follows:
 Overriding defaults
 '''''''''''''''''''
 
-The ``has_many_through`` method takes up to four arguments, which allow
+The ``has_many_through`` method takes up to six arguments, which allow
 us to progressively override default assumptions made by the method.
 
 **First argument: associated model name** - this is mandatory and should
@@ -238,3 +269,11 @@ this is optional, and defaults to the name of the base table with
 **Fourth argument: custom key to associated table on intermediate
 table** - this is optional, and defaults to the name of the associated
 table with ``_id`` appended.
+
+**Fifth argument: foreign key column in the base table** - 
+this is optional, and defaults to the name of the primary key column in 
+the base table.
+
+**Sixth argument: foreign key column in the associated table** - 
+this is optional, and defaults to the name of the primary key column 
+in the associated table.

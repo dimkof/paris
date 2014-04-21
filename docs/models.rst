@@ -9,8 +9,9 @@ example, if you are building an application that requires users, you
 should create a ``User`` class. Your model classes should extend the
 base ``Model`` class:
 
-::
+.. code-block:: php
 
+    <?php
     class User extends Model {
     }
 
@@ -32,15 +33,16 @@ convert between the two automatically. For example, if your class is
 called ``CarTyre``, Paris will look for a table named ``car_tyre``.
 
 If you are using namespaces then they will be converted to a table name
-in a similar way. For example ``\\Models\\CarTyre`` would be converted to
+in a similar way. For example ``\Models\CarTyre`` would be converted to
 ``models_car_tyre``. Note here that backslashes are replaced with underscores
 in addition to the *CapWords* replacement discussed in the previous paragraph.
 
 To override this default behaviour, add a **public static** property to
 your class called ``$_table``:
 
-::
+.. code-block:: php
 
+    <?php
     class User extends Model {
         public static $_table = 'my_user_table';
     }
@@ -61,8 +63,9 @@ column. By default, Paris will use a column called ``id``. To override
 this default behaviour, add a **public static** property to your class
 called ``$_id_column``:
 
-::
+.. code-block:: php
 
+    <?php
     class User extends Model {
         public static $_id_column = 'my_id_column';
     }

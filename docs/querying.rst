@@ -11,8 +11,9 @@ documentation for details of this API.**
 
 For example:
 
-::
+.. code-block:: php
 
+    <?php
     $users = Model::factory('User')
         ->where('name', 'Fred')
         ->where_gte('age', 20)
@@ -21,9 +22,22 @@ For example:
 You can also use the same shortcut provided by Idiorm when looking up a
 record by its primary key ID:
 
-::
+.. code-block:: php
 
+    <?php
     $user = Model::factory('User')->find_one($id);
+
+If you are using PHP 5.3+ you can also do the following: 
+
+.. code-block:: php
+
+    <?php
+    $users = User::where('name', 'Fred')
+        ->where_gte('age', 20)
+        ->find_many();
+        
+This does the same as the example above but is shorter and more readable.
+
 
 The only differences between using Idiorm and using Paris for querying
 are as follows:
@@ -43,9 +57,42 @@ are as follows:
 You may also retrieve a count of the number of rows returned by your
 query. This method behaves exactly like Idiorm’s ``count`` method:
 
-::
+.. code-block:: php
 
+    <?php
     $count = Model::factory('User')->where_lt('age', 20)->count();
+
+A note on PSR-1 and camelCase
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+All the methods detailed in the documentation can also be called in a PSR-1 way:
+underscores (_) become camelCase. Here follows an example of one query chain
+being converted to a PSR-1 compliant style.
+
+.. code-block:: php
+
+    <?php
+    // documented and default style
+    $count = Model::factory('User')->where_lt('age', 20)->find_one();
+
+    // PSR-1 compliant style
+    $count = Model::factory('User')->whereLt('age', 20)->findOne();
+
+As you can see any method can be changed from the documented underscore (_) format
+to that of a camelCase method name.
+
+.. note::
+
+    In the background the PSR-1 compliant style uses the `__call()` and 
+    `__callStatic()` magic methods to map the camelCase method name you supply
+    to the original underscore method name. It then uses `call_user_func_array()`
+    to apply the arguments to the method. If this minimal overhead is too great
+    then you can simply revert to using the underscore methods to avoid it. In
+    general this will not be a bottle neck in any application however and should
+    be considered a micro-optimisation.
+
+    As `__callStatic()` was added in PHP 5.3.0 you will need at least that version
+    of PHP to use this feature in any meaningful way.
 
 Getting data from objects, updating and inserting data
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -55,23 +102,26 @@ they were instances of Idiorm’s raw ``ORM`` class.
 
 You can access data:
 
-::
+.. code-block:: php
 
+    <?php
     $user = Model::factory('User')->find_one($id);
     echo $user->name;
 
 Update data and save the instance:
 
-::
+.. code-block:: php
 
+    <?php
     $user = Model::factory('User')->find_one($id);
     $user->name = 'Paris';
     $user->save();
 
 To create a new (empty) instance, use the ``create`` method:
 
-::
+.. code-block:: php
 
+    <?php
     $user = Model::factory('User')->create();
     $user->name = 'Paris';
     $user->save();
@@ -79,14 +129,16 @@ To create a new (empty) instance, use the ``create`` method:
 To check whether a property has been changed since the object was
 created (or last saved), call the ``is_dirty`` method:
 
-::
+.. code-block:: php
 
+    <?php
     $name_has_changed = $person->is_dirty('name'); // Returns true or false
 
 You can also use database expressions when setting values on your model:
 
-::
+.. code-block:: php
 
+    <?php
     $user = Model::factory('User')->find_one($id);
     $user->name = 'Paris';
     $user->set_expr('last_logged_in', 'NOW()');
@@ -95,8 +147,9 @@ You can also use database expressions when setting values on your model:
 Of course, because these objects are instances of your base model
 classes, you can also call methods that you have defined on them:
 
-::
+.. code-block:: php
 
+    <?php
     class User extends Model {
         public function full_name() {
             return $this->first_name . ' ' . $this->last_name;
@@ -109,8 +162,9 @@ classes, you can also call methods that you have defined on them:
 To delete the database row associated with an instance of your model,
 call its ``delete`` method:
 
-::
+.. code-block:: php
 
+    <?php
     $user = Model::factory('User')->find_one($id);
     $user->delete();
 
@@ -122,8 +176,9 @@ The ``as_array`` method takes column names as optional arguments. If one
 or more of these arguments is supplied, only matching column names will
 be returned.
 
-::
+.. code-block:: php
 
+    <?php
     class Person extends Model {
     }
 
