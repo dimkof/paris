@@ -79,6 +79,7 @@ Changelog
 * All classes moved to namespace \Paris:
 	- Model => \Paris\Model
 	- ORMWrapper => \Paris\ORMWrapper
+	- ParisMethodMissingException => \Paris\MethodMissingException
 * Use of PHP 5.3 static call
 
 #### 1.5.0 - released 2014-01-XX
